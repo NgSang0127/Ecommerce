@@ -1,5 +1,6 @@
 package org.sang.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -32,7 +33,7 @@ public class Rating {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id",nullable = false)
@@ -41,6 +42,7 @@ public class Rating {
 	private Double rating;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 

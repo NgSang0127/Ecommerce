@@ -40,6 +40,8 @@ public class Address {
 
 	private String zipCode;
 
+	private String phone;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
