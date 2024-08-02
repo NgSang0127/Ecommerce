@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.sang.ecommerce.repository.TokenRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
+	private final TokenRepository tokenRepo;
 
 	@Override
 	protected void doFilterInternal(
@@ -32,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		final String authHeader = request.getHeader("Authorization");
+		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		final String jwt;
 		final String userEmail;
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -43,7 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		userEmail = jwtService.extractUsername(jwt);
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-			if (jwtService.isTokenValid(jwt, userDetails)) {
+			var isTokenValid = tokenRepo.findByToken(jwt)
+					.map(t -> !t.isExpired() && !t.isRevoked())
+					.orElse(false);
+			if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 						userDetails,
 						null,
@@ -54,6 +60,10 @@ public class JwtFilter extends OncePerRequestFilter {
 						new WebAuthenticationDetailsSource().buildDetails(request)
 				);
 				SecurityContextHolder.getContext().setAuthentication(authToken);
+			}else{
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401
+				response.getWriter().write("Token has expired or is not valid");
+				return;
 			}
 
 		}
