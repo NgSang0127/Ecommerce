@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import java.util.HashSet;
 import java.util.Set;
 import org.sang.ecommerce.exception.OperationNotPermittedException;
+import org.sang.ecommerce.exception.ProductException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -124,5 +125,15 @@ public class GlobalExceptionHandler {
 								.build()
 				);
 
+	}
+
+	@ExceptionHandler(ProductException.class)
+	public ResponseEntity<ExceptionResponse> handleException(ProductException exp){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ExceptionResponse.builder()
+								.error(exp.getMessage())
+								.build()
+				);
 	}
 }

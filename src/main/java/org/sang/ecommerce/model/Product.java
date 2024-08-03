@@ -42,11 +42,11 @@ public class Product {
 
 	private String description;
 
-	private int price;
+	private double price;
 
 	private int discountedPrice;
 
-	private int discountPercents;
+	private int discountPercent;
 
 	private int quantity;
 
