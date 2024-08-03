@@ -150,27 +150,37 @@ public class AuthenticationService {
 
 	public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String refreshToken;
+		final String validToken;
 		final String userEmail;
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			throw new OperationNotPermittedException("User not authenticated");
 		}
-		refreshToken = authHeader.substring(7);
-		userEmail = jwtService.extractUsername(refreshToken);
+		validToken = authHeader.substring(7);
+		userEmail = jwtService.extractUsername(validToken);
 		if (userEmail != null) {//ko can kiem tra xac thuc nua
 			var user = userRepo.findByEmail(userEmail).orElseThrow(
 					() -> new UsernameNotFoundException("User not found")
 			);
-			if (jwtService.isTokenValid(refreshToken, user)) {
+			var isTokenValid = tokenRepo.findByToken(validToken)
+					.map(t -> !t.isExpired() && !t.isRevoked())
+					.orElse(false);
+			if (jwtService.isTokenValid(validToken, user) && isTokenValid) {
 				// Xóa các token cũ
 				var accessToken = jwtService.generateRefreshToken(user);
 				tokenRepo.findByUser(user).forEach(token -> {
 					token.setExpired(true);
 					token.setRevoked(true);
-					token.setToken(accessToken);
-					token.setTokenType(TokenType.BEARER);
 					tokenRepo.save(token);
 				});
+				tokenRepo.save(
+						Token.builder()
+								.expired(false)
+								.revoked(false)
+								.token(accessToken)
+								.tokenType(TokenType.BEARER)
+								.user(user)
+								.build()
+				);
 
 				return AuthenticationResponse.builder()
 						.accessToken(accessToken)

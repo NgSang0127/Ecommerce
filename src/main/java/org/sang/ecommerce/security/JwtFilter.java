@@ -33,6 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		if (request.getServletPath().contains("/api/v1/auth")) {
 			filterChain.doFilter(request, response);
+			System.out.println("Skipping authentication for path: " + request.getServletPath());
 			return;
 		}
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -40,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		final String userEmail;
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
+			System.out.println("No authorization header found or header does not start with Bearer");
 			return;
 		}
 		jwt = authHeader.substring(7);
@@ -60,10 +62,6 @@ public class JwtFilter extends OncePerRequestFilter {
 						new WebAuthenticationDetailsSource().buildDetails(request)
 				);
 				SecurityContextHolder.getContext().setAuthentication(authToken);
-			}else{
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401
-				response.getWriter().write("Token has expired or is not valid");
-				return;
 			}
 
 		}
