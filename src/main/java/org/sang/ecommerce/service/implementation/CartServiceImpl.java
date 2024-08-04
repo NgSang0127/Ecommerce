@@ -32,13 +32,14 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public String addCartItem(Long userId, AddItemRequest request) throws ProductException {
+	public CartItem addCartItem(Long userId, AddItemRequest request) throws ProductException {
 		Cart cart=cartRepository.findByUserId(userId);
 		Product product=productService.findProductById(request.getProductId());
 		CartItem isPresent=cartItemRepository.isCartItemExists(cart,product, request.getSize(), userId);
+		CartItem cartItem = null;
 		if(isPresent == null){
 			double price=request.getQuantity()*product.getDiscountedPrice();
-			var cartItem=CartItem.builder()
+			cartItem=CartItem.builder()
 					.product(product)
 					.cart(cart)
 					.quantity(request.getQuantity())
@@ -49,8 +50,9 @@ public class CartServiceImpl implements CartService {
 			CartItem createdCartItem=cartItemService.createCartItem(cartItem);
 			cart.getCartItems().add(createdCartItem);
 		}
+		return cartItem;
+		
 
-		return "Item add to card successful";
 	}
 
 	@Override

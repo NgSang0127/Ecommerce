@@ -8,6 +8,7 @@ import org.sang.ecommerce.exception.CartItemException;
 import org.sang.ecommerce.exception.OperationNotPermittedException;
 import org.sang.ecommerce.exception.OrderException;
 import org.sang.ecommerce.exception.ProductException;
+import org.sang.ecommerce.exception.StripePaymentException;
 import org.sang.ecommerce.exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -173,6 +174,17 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CartItemException.class)
 	public ResponseEntity<ExceptionResponse> handleException(CartItemException exp){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ExceptionResponse.builder()
+								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
+								.build()
+				);
+	}
+
+	@ExceptionHandler(StripePaymentException.class)
+	public ResponseEntity<ExceptionResponse> handleException(StripePaymentException exp){
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(
 						ExceptionResponse.builder()

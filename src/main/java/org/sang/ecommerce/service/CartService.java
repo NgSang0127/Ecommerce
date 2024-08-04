@@ -9,7 +9,7 @@ import org.sang.ecommerce.request.AddItemRequest;
 public interface CartService {
 	Cart createCart(User user);
 
-	String addCartItem(Long userId, AddItemRequest request) throws ProductException;
+	CartItem addCartItem(Long userId, AddItemRequest request) throws ProductException;
 
 	Cart findUserCart(Long userId);
 }

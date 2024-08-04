@@ -38,5 +38,8 @@ application:
   mailing:
     frontend:
       activation-url: http://localhost:3000/activate-account
+stripe:
+  api:
+    key: sk_test_51Pc7hZRouRzOhclz6afLEJZpKoRZb10IASVHpRk8zhYokrsVeJAiHUgJp4Gn7f5NO15G7KV4Q7EDMqNY4WcWL7qY00kUikEkD3
 server:
   port: 8080

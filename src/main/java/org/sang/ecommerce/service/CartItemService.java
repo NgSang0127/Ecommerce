@@ -9,7 +9,7 @@ import org.sang.ecommerce.model.Product;
 public interface CartItemService {
 	CartItem createCartItem(CartItem cartItem);
 
-	CartItem updateCartItem(Long userId,CartItem cartItem) throws CartItemException, UserException;
+	CartItem updateCartItem(Long userId,Long cartItemId,CartItem cartItem) throws CartItemException, UserException;
 
 	CartItem isCartItemExists(Cart cart, Product product,String size,Long userId);
 
