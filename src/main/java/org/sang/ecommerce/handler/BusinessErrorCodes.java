@@ -15,7 +15,9 @@ public enum BusinessErrorCodes {
 
 	ACCOUNT_DISABLED(303,HttpStatus.FORBIDDEN,"User account is disabled"),
 
-	BAD_CREDENTIALS(304,HttpStatus.FORBIDDEN,"Login and / or password is incorrect")
+	BAD_CREDENTIALS(304,HttpStatus.FORBIDDEN,"Login and / or password is incorrect"),
+
+
 	;
 	private final int code;
 	private final String description;

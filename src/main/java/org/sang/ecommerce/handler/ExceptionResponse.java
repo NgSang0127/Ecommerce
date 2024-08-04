@@ -3,6 +3,7 @@ package org.sang.ecommerce.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class ExceptionResponse {
 	private String businessErrorDescription;
 	private String error;
 	private Set<String> validationErrors;
+	private LocalDateTime timestamp;
 	private Map<String,String> errors;
 
 

@@ -1,10 +1,14 @@
 package org.sang.ecommerce.handler;
 
 import jakarta.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import org.sang.ecommerce.exception.CartItemException;
 import org.sang.ecommerce.exception.OperationNotPermittedException;
+import org.sang.ecommerce.exception.OrderException;
 import org.sang.ecommerce.exception.ProductException;
+import org.sang.ecommerce.exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,6 +32,7 @@ public class GlobalExceptionHandler {
 								.businessErrorCode(BusinessErrorCodes.ACCOUNT_LOCKED.getCode())
 								.businessErrorDescription(BusinessErrorCodes.ACCOUNT_LOCKED.getDescription())
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -44,6 +49,7 @@ public class GlobalExceptionHandler {
 								.businessErrorCode(BusinessErrorCodes.ACCOUNT_DISABLED.getCode())
 								.businessErrorDescription(BusinessErrorCodes.ACCOUNT_DISABLED.getDescription())
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -60,6 +66,7 @@ public class GlobalExceptionHandler {
 								.businessErrorCode(BusinessErrorCodes.BAD_CREDENTIALS.getCode())
 								.businessErrorDescription(BusinessErrorCodes.BAD_CREDENTIALS.getDescription())
 								.error(BusinessErrorCodes.BAD_CREDENTIALS.getDescription())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -74,6 +81,7 @@ public class GlobalExceptionHandler {
 				.body(
 						ExceptionResponse.builder()
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -94,6 +102,7 @@ public class GlobalExceptionHandler {
 				.body(
 						ExceptionResponse.builder()
 								.validationErrors(errors)
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -111,6 +120,7 @@ public class GlobalExceptionHandler {
 						ExceptionResponse.builder()
 								.businessErrorDescription("Internal error, contact the admin")
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -122,6 +132,7 @@ public class GlobalExceptionHandler {
 				.body(
 						ExceptionResponse.builder()
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 
@@ -133,7 +144,43 @@ public class GlobalExceptionHandler {
 				.body(
 						ExceptionResponse.builder()
 								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
 								.build()
 				);
 	}
+
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<ExceptionResponse> handleException(UserException exp){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ExceptionResponse.builder()
+								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
+								.build()
+				);
+	}
+
+	@ExceptionHandler(OrderException.class)
+	public ResponseEntity<ExceptionResponse> handleException(OrderException exp){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ExceptionResponse.builder()
+								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
+								.build()
+				);
+	}
+
+	@ExceptionHandler(CartItemException.class)
+	public ResponseEntity<ExceptionResponse> handleException(CartItemException exp){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ExceptionResponse.builder()
+								.error(exp.getMessage())
+								.timestamp(LocalDateTime.now())
+								.build()
+				);
+	}
+
+
 }

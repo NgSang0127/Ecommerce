@@ -1,7 +1,6 @@
-package org.sang.ecommerce.model;
+package org.sang.ecommerce.model.payment;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
