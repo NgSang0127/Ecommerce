@@ -1,6 +1,5 @@
 package org.sang.ecommerce.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import org.sang.ecommerce.email.EmailTemplateName;
 import org.sang.ecommerce.exception.OperationNotPermittedException;
 import org.sang.ecommerce.model.EmailVerificationCode;
 import org.sang.ecommerce.model.Token;
-import org.sang.ecommerce.model.TokenType;
+import org.sang.ecommerce.constant.TokenType;
 import org.sang.ecommerce.model.User;
 import org.sang.ecommerce.repository.EmailVerificationCodeRepository;
 import org.sang.ecommerce.repository.TokenRepository;
@@ -27,12 +26,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 @Service

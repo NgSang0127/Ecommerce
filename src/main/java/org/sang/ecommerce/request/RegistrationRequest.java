@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.sang.ecommerce.model.Role;
+import org.sang.ecommerce.constant.Role;
 
 @Getter
 @Setter

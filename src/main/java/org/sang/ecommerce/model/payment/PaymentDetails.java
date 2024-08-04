@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.sang.ecommerce.constant.PaymentMethod;
+import org.sang.ecommerce.constant.PaymentStatus;
 
 @Embeddable
 @Getter
@@ -15,9 +17,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PaymentDetails {
 
-	private String paymentMethod;
+	private PaymentMethod paymentMethod;
 
-	private String status;
+	private PaymentStatus status;
 
 	private String paymentId;
 
